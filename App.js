@@ -1,20 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import { bootstrap } from './src/bootstrap';
+import { name as appName } from './app.json';
+import AppNavigation from './src/navigation/AppNavigation';
+import { AppRegistry } from 'react-native';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+	const [isReady, setIsReady] = useState(false);
+
+	useEffect(() => {
+		async function prepare() {
+			try {
+				await bootstrap();
+			} catch (e) {
+				console.warn(e);
+			} finally {
+				setIsReady(true);
+				SplashScreen.hideAsync();
+			}
+		}
+		if (isReady === false) {
+			prepare();
+		}
+	}, []);
+
+	if (!isReady) {
+		return null;
+	}
+	return <AppNavigation />;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+AppRegistry.registerComponent(appName, () => AppNavigation);
