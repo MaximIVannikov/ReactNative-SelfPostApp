@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image, Button, ScrollView, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { DATA } from '../data';
 import { THEME } from '../theme';
+import { useDispatch, useSelector } from 'react-redux';
+import { removePost } from '../store/actions/post';
 
 export const PostScreen = ({ navigation }) => {
 	const route = useRoute();
 	const { postId } = route.params;
 
-	const post = DATA.find((p) => p.id === postId);
+	const dispatch = useDispatch();
+
+	const post = useSelector((state) => state.post.allPosts.find((p) => p.id === postId));
 
 	const removeHandler = () => {
 		Alert.alert('Deleting post', 'Are you sure you want delete post ?', [
@@ -16,9 +19,19 @@ export const PostScreen = ({ navigation }) => {
 				text: 'Cancel',
 				style: 'cancel',
 			},
-			{ text: 'Delete', style: 'destructive', onPress: () => console.log('OK Pressed') },
+			{
+				text: 'Delete',
+				style: 'destructive',
+				onPress: () => {
+					dispatch(removePost(postId));
+					navigation.navigate('Main');
+				},
+			},
 		]);
 	};
+	if (!post) {
+		return null;
+	}
 
 	return (
 		<ScrollView>

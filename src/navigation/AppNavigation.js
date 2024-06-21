@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -14,6 +14,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleBooked } from '../store/actions/post';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -28,6 +30,21 @@ const navigatorOptions = {
 };
 
 function PostStackNavigator() {
+	const dispatch = useDispatch();
+
+	const toggle = useCallback(
+		(id) => {
+			dispatch(toggleBooked(id));
+		},
+		[dispatch]
+	);
+
+	// const booked = useSelector((state) => state.post.bookedPost.some((post) => post.id === postId));
+
+	// useEffect(() => {
+	// 	navigation.setParams({ booked });
+	// }, [booked]);
+
 	return (
 		<Stack.Navigator screenOptions={navigatorOptions} initialRouteName="Main">
 			<Stack.Screen
@@ -50,13 +67,17 @@ function PostStackNavigator() {
 			<Stack.Screen
 				name="Post"
 				component={PostScreen}
-				options={({ route }) => ({
+				options={({ route, navigation }) => ({
 					title: `Post from ${new Date(route.params.postDate).toLocaleDateString()}`,
 					headerRight: () => {
-						const headerIcon = route.params.postBooked === true ? 'star' : 'star-outline';
+						const id = route.params.postId;
+						const booked = useSelector((state) => state.post.allPosts.find((post) => post.id === id));
+
+						const headerIcon = booked?.booked === true ? 'star' : 'star-outline';
+
 						return (
 							<HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-								<Item title="Take photo" iconName={headerIcon} onPress={() => console.log('Add pressed')} />
+								<Item title="Take photo" iconName={headerIcon} onPress={() => toggle(id)} />
 							</HeaderButtons>
 						);
 					},
@@ -133,7 +154,7 @@ function CreateNavigator() {
 function BottomNavigator() {
 	return Platform.OS === 'ios' ? (
 		<Tab.Navigator
-			tabBarOptions={{
+			screenOptions={{
 				activeTintColor: THEME.MAIN_COLOR,
 			}}
 		>

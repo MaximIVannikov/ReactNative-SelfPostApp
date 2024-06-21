@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { bootstrap } from './src/bootstrap';
-import { name as appName } from './app.json';
 import AppNavigation from './src/navigation/AppNavigation';
-import { AppRegistry } from 'react-native';
+import { Provider } from 'react-redux';
+import store from './src/store';
 
 export default function App() {
 	const [isReady, setIsReady] = useState(false);
@@ -27,7 +27,11 @@ export default function App() {
 	if (!isReady) {
 		return null;
 	}
-	return <AppNavigation />;
+	return (
+		<Provider store={store}>
+			<AppNavigation />
+		</Provider>
+	);
 }
 
-AppRegistry.registerComponent(appName, () => AppNavigation);
+// AppRegistry.registerComponent(appName, () => AppNavigation);
