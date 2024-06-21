@@ -33,5 +33,3 @@ export default function App() {
 		</Provider>
 	);
 }
-
-// AppRegistry.registerComponent(appName, () => AppNavigation);

@@ -31,10 +31,11 @@ const navigatorOptions = {
 
 function PostStackNavigator() {
 	const dispatch = useDispatch();
+	// const post = useSelector(state => state.post.allPosts.find(p => p.id === postId))
 
 	const toggle = useCallback(
-		(id) => {
-			dispatch(toggleBooked(id));
+		(post) => {
+			dispatch(toggleBooked(post));
 		},
 		[dispatch]
 	);
@@ -74,10 +75,11 @@ function PostStackNavigator() {
 						const booked = useSelector((state) => state.post.allPosts.find((post) => post.id === id));
 
 						const headerIcon = booked?.booked === true ? 'star' : 'star-outline';
+						const post = useSelector((state) => state.post.allPosts.find((p) => p.id === id));
 
 						return (
 							<HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
-								<Item title="Take photo" iconName={headerIcon} onPress={() => toggle(id)} />
+								<Item title="Take photo" iconName={headerIcon} onPress={() => toggle(post)} />
 							</HeaderButtons>
 						);
 					},

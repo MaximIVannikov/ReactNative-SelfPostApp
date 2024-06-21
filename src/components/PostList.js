@@ -13,7 +13,7 @@ export const PostList = ({ data, onOpen }) => {
 
 	return (
 		<View style={styles.wrapper}>
-			<FlatList data={data} keyExtractor={(post) => post.id.toString()} renderItem={({ item }) => <Post post={item} onOpen={onOpen} />} />
+			<FlatList data={data} keyExtractor={(post) => post.id} renderItem={({ item }) => <Post post={item} onOpen={onOpen} />} />
 		</View>
 	);
 };
