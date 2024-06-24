@@ -4,12 +4,12 @@
 		"slug": "React_Native_Self_Post_App",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"icon": "./assets/icon.png",
+		"icon": "./assets/rn-icon.png",
 		"userInterfaceStyle": "light",
 		"splash": {
-			"image": "./assets/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
+			"image": "./assets/rn-splash.png",
+			"resizeMode": "cover",
+			"backgroundColor": "#242832"
 		},
 		"plugins": [
 			[
